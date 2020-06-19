@@ -2181,7 +2181,7 @@ if __name__ == '__main__':
     figure = GeoVisualization()
 
     @figure.add_data_for_visualization
-    def a():
+    def demo():
         return poi
-    #haha.daily_data_plot(a)
-    figure.geo_plot(a)
+    #figure.daily_data_plot(demo)
+    figure.geo_plot(demo)
