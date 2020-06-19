@@ -1,0 +1,22 @@
+{
+  "install": "pip3 install --user pipenv && pipenv install",
+  "start": "pipenv run start",
+  "watch": {
+    "ignore": [
+      "\\.pyc$",
+      "Pipfile.lock"
+    ],
+    "install": {
+      "include": [
+        "Pipfile"
+      ]
+    },
+    "restart": {
+      "include": [
+        "\\.py$",
+        "pipenv run start"
+      ]
+    },
+    "throttle": 1000
+  }
+}
