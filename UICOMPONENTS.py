@@ -63,23 +63,33 @@ class DataVisualization:
 class GeoVisualization(DataVisualization):
 
     # Define the function to implement plot
-    def geo_plot(self, source):
-        df = self.matrix[source.__name__]
+        def geo_plot(self, source_poi, intersted_data):
+        df_poi = self.matrix[source_poi.__name__]
+        df_interested_data = self.matrix[intersted_data.__name__]
+        # Joining the POI data with the data of interest
+        df = df_interested_data.merge(df_poi, on='poi_id')
+        print(df)
         # If there is no geo data in the data set, raises error
         if "lat" not in df.columns or "lon" not in df.columns:
             raise Exception('There are no geographic data available in the data')
+        # Construct a hover data map that will determine the data to be shown in the map hover
+        hover_data = {"poi_id": False, "lat": False, "lon": False}
+        hover_data.update(dict((c, True) for c in df.columns if c != "poi_id" and c != "lat" and c != "lon"))
         # Construct an instance of figure
         fig = px.scatter_mapbox(df,
                                 lat="lat",
                                 lon="lon",
+                                size=[10 for _ in range(len(df.index))],
                                 hover_name="name",
-                                hover_data=["poi_id"],
+                                hover_data=hover_data,
                                 color_discrete_sequence=["fuchsia"],
                                 zoom=3,
                                 height=300,
-                                size=[10 for _ in range(len(df.index))])
-        fig.update_layout(mapbox_style="open-street-map")
+                                animation_frame="date",
+                                animation_group="poi_id",)
+        fig.update_layout(mapbox_style="open-street-map",height=600)
         fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+        fig.write_html(r"C:\Users\Xiaokeai\Desktop/POI.html")
         fig.show()
 
 
