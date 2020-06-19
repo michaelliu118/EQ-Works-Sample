@@ -1,1 +1,1 @@
-This is for submitting the work sample provided by EQ work.
+This is Liyang Liu's submission for the work sample provided by EQ work.
