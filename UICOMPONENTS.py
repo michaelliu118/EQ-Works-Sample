@@ -2181,7 +2181,19 @@ if __name__ == '__main__':
     figure = GeoVisualization()
 
     @figure.add_data_for_visualization
-    def demo():
-        return poi
-    #figure.daily_data_plot(demo)
-    figure.geo_plot(demo)
+    def demo_daily():
+        return click_daily
+
+    @figure.add_data_for_visualization
+    def demo_hourly():
+      return click_hourly
+
+
+    @figure.add_data_for_visualization
+    def demo_poi():
+      return poi
+
+    figure.hour_data_plot(demo_hourly)
+    figure.daily_data_plot(demo_daily)
+    figure.geo_plot(demo_poi)
+
