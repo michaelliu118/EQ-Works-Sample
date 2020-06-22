@@ -2,7 +2,7 @@ import os
 from flask import Flask, jsonify
 import sqlalchemy
 from RateLimiter import RateLimiter
-from UICOMPONENTS import DataVistualization as ui
+from UICOMPONENTS import DataVisualization as ui
 
 app = Flask(__name__)
 
