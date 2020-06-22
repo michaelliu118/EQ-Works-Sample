@@ -63,7 +63,7 @@ class DataVisualization:
 class GeoVisualization(DataVisualization):
 
     # Define the function to implement plot
-        def geo_plot(self, source_poi, intersted_data):
+    def geo_plot(self, source_poi, intersted_data):
         df_poi = self.matrix[source_poi.__name__]
         df_interested_data = self.matrix[intersted_data.__name__]
         # Joining the POI data with the data of interest
