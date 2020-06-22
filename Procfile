@@ -1,1 +1,1 @@
-web: gunicorn app.wsgi --log-file -
+web: gunicorn EQ-Works-Sample.wsgi --log-file -
