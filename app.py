@@ -32,6 +32,7 @@ def index():
 @figure.hour_data_plot
 @geo.add_data_for_visualization
 @figure.add_data_for_visualization
+@rl_eh.request
 def events_hourly():
     return queryHelper('''
         SELECT *
@@ -44,6 +45,7 @@ def events_hourly():
 @app.route('/events/daily')
 @figure.daily_data_plot
 @figure.add_data_for_visualization
+@rl_ed.request
 def events_daily():
     return queryHelper('''
         SELECT date, SUM(events) AS events
@@ -68,7 +70,8 @@ def stats_hourly():
 
 
 @app.route('/stats/daily')
-
+@figure.daily_data_plot
+@figure.add_data_for_visualization
 @rl_sd.request
 def stats_daily():
     return queryHelper('''
@@ -82,6 +85,7 @@ def stats_daily():
         LIMIT 7;
     ''')
 @geo.add_data_for_visualization
+@rl_poi.request
 def poi():
     return queryHelper('''
         SELECT *
