@@ -93,7 +93,3 @@ fig = geo.geo_plot(poi, events_hourly)
 def poi_func():
     return fig
 
-import webbrowser
-
-webbrowser.open("http://127.0.0.1:5000/")
-app.run(debug=True)
