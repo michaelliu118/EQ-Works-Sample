@@ -1,26 +1,38 @@
-import os
-from flask import Flask, jsonify
+from flask import Flask,jsonify
 import sqlalchemy
 from RateLimiter import RateLimiter
 from UICOMPONENTS import DataVisualization as ui
 
+
 app = Flask(__name__)
-
-
+ctx = app.app_context()
+ctx.push()
+rl_index = RateLimiter(5)
+rl_eh = RateLimiter(5)
+rl_ed = RateLimiter(5)
+rl_sh = RateLimiter(5)
+rl_sd = RateLimiter(5)
+rl_poi = RateLimiter(5)
+figure = ui()
 
 # database engine
-engine = sqlalchemy.create_engine(os.getenv('SQL_URI'))
-
+engine = sqlalchemy.create_engine('postgresql://readonly:w2UIO@#bg532!@work-samples-db.cx4wctygygyq.us-east-1.rds.amazonaws.com:5432/work_samples')
+def queryHelper(query):
+    with engine.connect() as conn:
+        result = conn.execute(query).fetchall()
+        return jsonify([dict(row.items()) for row in result])
 
 @app.route('/')
+@rl_index.request
 def index():
-    return 'Welcome to EQ Works'
-
+    return 'welcome eq works'
 
 @app.route('/events/hourly')
+@figure.hour_data_plot
+@figure.add_data_for_visualization
 def events_hourly():
     return queryHelper('''
-        SELECT date, hour, events
+        SELECT *
         FROM public.hourly_events
         ORDER BY date, hour
         LIMIT 168;
@@ -28,6 +40,8 @@ def events_hourly():
 
 
 @app.route('/events/daily')
+@figure.daily_data_plot
+@figure.add_data_for_visualization
 def events_daily():
     return queryHelper('''
         SELECT date, SUM(events) AS events
@@ -39,9 +53,12 @@ def events_daily():
 
 
 @app.route('/stats/hourly')
+@figure.hour_data_plot
+@figure.add_data_for_visualization
+@rl_sh.request
 def stats_hourly():
     return queryHelper('''
-        SELECT date, hour, impressions, clicks, revenue
+        SELECT clicks, date,hour,impressions,poi_id, CAST(revenue AS int)
         FROM public.hourly_stats
         ORDER BY date, hour
         LIMIT 168;
@@ -49,6 +66,9 @@ def stats_hourly():
 
 
 @app.route('/stats/daily')
+@figure.daily_data_plot
+@figure.add_data_for_visualization
+@rl_sd.request
 def stats_daily():
     return queryHelper('''
         SELECT date,
@@ -62,13 +82,10 @@ def stats_daily():
     ''')
 
 @app.route('/poi')
+@rl_poi.request
 def poi():
     return queryHelper('''
         SELECT *
         FROM public.poi;
     ''')
 
-def queryHelper(query):
-    with engine.connect() as conn:
-        result = conn.execute(query).fetchall()
-        return jsonify([dict(row.items()) for row in result])
