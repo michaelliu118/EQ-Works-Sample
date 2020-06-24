@@ -7,6 +7,7 @@ import datetime
 from matplotlib.figure import Figure
 import base64
 import json
+import plotly.offline as opy
 
 
 class DataVisualization:
