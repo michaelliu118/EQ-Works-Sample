@@ -33,8 +33,7 @@ class DataVisualization:
         # Construct the plot
         fig = Figure()
         axe = fig.subplots(1, len(df.columns),
-                           squeeze=False,
-                           figsize=(10, 6.5))
+                           squeeze=False)
         y = 0
         # Use looping to plot all the graphs
         for column in df.columns:
@@ -80,7 +79,6 @@ class DataVisualization:
         x = 0
         fig, axe = plt.subplots(len(columns), 1,
                                 squeeze=False,
-                                figsize=(10, 6.5),
                                 constrained_layout=True)
         # fig.tight_layout()
         # using loop to plot all the heatmaps
