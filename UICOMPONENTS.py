@@ -128,8 +128,9 @@ class GeoVisualization(DataVisualization):
                                 animation_group="poi_id",)
         fig.update_layout(mapbox_style="open-street-map",height=600)
         fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-        fig.write_html(r"C:\Users\Xiaokeai\Desktop\POI.html")
-        fig.show()
+        #fig.write_html(r"C:\Users\Xiaokeai\Desktop\POI.html")
+        div = opy.plot(fig, auto_open=False, output_type='div')
+        return div
 
 
 # Demonstrate the UI components
