@@ -79,7 +79,8 @@ class DataVisualization:
         x = 0
         fig, axe = plt.subplots(len(columns), 1,
                                 squeeze=False,
-                                constrained_layout=True)
+                                constrained_layout=True,
+                               figsize=(10, 6.5))
         # fig.tight_layout()
         # using loop to plot all the heatmaps
         for column in columns:
