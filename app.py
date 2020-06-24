@@ -2,7 +2,7 @@ from flask import Flask,jsonify
 import sqlalchemy
 from RateLimiter import RateLimiter
 from UICOMPONENTS import DataVisualization as ui
-
+from UICOMPONENTS import GeoVisualization as Geo
 
 app = Flask(__name__)
 ctx = app.app_context()
@@ -14,6 +14,7 @@ rl_sh = RateLimiter(5)
 rl_sd = RateLimiter(5)
 rl_poi = RateLimiter(5)
 figure = ui()
+geo = Geo()
 
 # database engine
 engine = sqlalchemy.create_engine('postgresql://readonly:w2UIO@#bg532!@work-samples-db.cx4wctygygyq.us-east-1.rds.amazonaws.com:5432/work_samples')
@@ -29,6 +30,7 @@ def index():
 
 @app.route('/events/hourly')
 @figure.hour_data_plot
+@geo.add_data_for_visualization
 @figure.add_data_for_visualization
 def events_hourly():
     return queryHelper('''
@@ -66,8 +68,7 @@ def stats_hourly():
 
 
 @app.route('/stats/daily')
-@figure.daily_data_plot
-@figure.add_data_for_visualization
+
 @rl_sd.request
 def stats_daily():
     return queryHelper('''
@@ -80,12 +81,15 @@ def stats_daily():
         ORDER BY date
         LIMIT 7;
     ''')
-
-@app.route('/poi')
-@rl_poi.request
+@geo.add_data_for_visualization
 def poi():
     return queryHelper('''
         SELECT *
         FROM public.poi;
     ''')
+
+fig = geo.geo_plot(poi, events_hourly)
+@app.route('/poi')
+def poi_func():
+    return fig
 
