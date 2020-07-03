@@ -109,7 +109,6 @@ class GeoVisualization(DataVisualization):
         df_interested_data = self.matrix[intersted_data.__name__]
         # Joining the POI data with the data of interest
         df = df_interested_data.merge(df_poi, on='poi_id')
-        print(df)
         # If there is no geo data in the data set, raises error
         if "lat" not in df.columns or "lon" not in df.columns:
             raise Exception('There are no geographic data available in the data')
@@ -3746,7 +3745,7 @@ if __name__ == '__main__':
     figure = GeoVisualization()
 
 
-    #@figure.add_data_for_visualization
+    @figure.add_data_for_visualization
     def demo_daily():
         return click_daily
 
@@ -3755,10 +3754,10 @@ if __name__ == '__main__':
         return str(events_hourly)
 
 
-    #@figure.add_data_for_visualization
+    @figure.add_data_for_visualization
     def demo_poi():
         return poi
 
     figure.hour_data_plot(demo_hourly)
-    #figure.daily_data_plot(demo_daily)
-    #figure.geo_plot(demo_poi, demo_hourly)
+    figure.daily_data_plot(demo_daily)
+    figure.geo_plot(demo_poi, demo_hourly)
